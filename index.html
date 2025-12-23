@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NaifNews | نايف نيوز - أخبار العالم بين يديك</title>
+    <meta name="description"
+        content="نايف نيوز مصدرك الأول للأخبار العالمية والمحلية، تغطية شاملة للسياسة، التكنولوجيا، الرياضة، والثقافة.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Skip link for accessibility -->
+    <a class="skip-link" href="#main-content">تخطي إلى المحتوى</a>
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="container">
+            <div class="logo">
+                <h1>Naif<span>News</span></h1>
+            </div>
+            <nav class="main-nav" role="navigation" aria-label="القائمة الرئيسية">
+                <ul>
+                    <li><a href="#" class="active">الرئيسية</a></li>
+                    <li><a href="dashboard.html" style="color: var(--accent-color);">لوحة التحكم</a></li>
+                    <li><a href="#">عاجل</a></li>
+                    <li><a href="#">سياسة</a></li>
+                    <li><a href="#">تكنولوجيا</a></li>
+                    <li><a href="#">رياضة</a></li>
+                    <li><a href="#">اقتصاد</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <button id="search-btn" aria-label="بحث">🔍</button>
+                <button id="theme-toggle" aria-label="تغيير الوضع">🌙</button>
+                <!-- added aria-controls and aria-expanded -->
+                <button id="mobile-menu-btn" aria-label="القائمة" aria-controls="mobile-menu" aria-expanded="false">☰
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu" id="mobile-menu" role="dialog" aria-hidden="true" aria-label="قائمة الموقع">
+        <button id="close-menu" aria-label="إغلاق القائمة">&times;</button>
+        <nav role="navigation" aria-label="قائمة الجوال">
+            <a href="#">الرئيسية</a>
+            <a href="#">عاجل</a>
+            <a href="#">سياسة</a>
+            <a href="#">تكنولوجيا</a>
+            <a href="#">رياضة</a>
+            <a href="#">اقتصاد</a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-grid">
+                    <article class="hero-main">
+                        <div class="hero-image" id="hero-img-1">
+                            <!-- Image will be set via CSS/JS or purely CSS with generated asset -->
+                            <img src="assets/hero_tech.jpg" alt="Technology News">
+                        </div>
+                        <div class="hero-content">
+                            <span class="category">تكنولوجيا</span>
+                            <h2>مستقبل الذكاء الاصطناعي: كيف سيغير حياتنا في 2026؟</h2>
+                            <p>أحدث التطورات في مجال الذكاء الاصطناعي التوليدي وتأثيرها المباشر على سوق العمل والتعليم.
+                            </p>
+                            <a href="#" class="read-more">اقرأ المزيد &larr;</a>
+                        </div>
+                    </article>
+                    <div class="hero-sub">
+                        <article class="sub-card">
+                            <div class="sub-content">
+                                <span class="category">اقتصاد</span>
+                                <h3>ارتفاع ملحوظ في أسواق الأسهم العالمية اليوم</h3>
+                                <time>منذ 3 ساعات</time>
+                            </div>
+                        </article>
+                        <article class="sub-card">
+                            <div class="sub-content">
+                                <span class="category">رياضة</span>
+                                <h3>نهائي الكأس.. استعدادات غير مسبوقة للجماهير</h3>
+                                <time>منذ 5 ساعات</time>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ticker / Breaking News -->
+        <div class="breaking-news-bar">
+            <div class="container">
+                <span class="breaking-label">عاجل</span>
+                <div class="ticker-content">
+                    <p>إطلاق قمر صناعي جديد لمراقبة المناخ... &nbsp;&nbsp; | &nbsp;&nbsp; اكتشاف أثري جديد في المنطقة
+                        العربية يعود لآلاف السنين...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Latest News Grid -->
+        <section class="latest-news section-padding">
+            <div class="container">
+                <div class="section-header">
+                    <h2>آخر الأخبار</h2>
+                    <a href="#" class="view-all">عرض الكل</a>
+                </div>
+                <div class="news-grid" id="latest-news-grid">
+                    <!-- Card 1 -->
+                    <article class="news-card">
+                        <div class="card-image">
+                            <img src="assets/news_city.jpg" alt="City News">
+                        </div>
+                        <div class="card-content">
+                            <span class="category tag-politics">سياسة</span>
+                            <h3>قمة دولية لمناقشة التحديات البيئية</h3>
+                            <p>قادة العالم يجتمعون اليوم لوضع خارطة طريق جديدة للحد من الانبعاثات الكربونية.</p>
+                            <div class="card-footer">
+                                <span class="author">أحمد محمد</span>
+                                <time>منذ ساعتين</time>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- Card 2 -->
+                    <article class="news-card">
+                        <div class="card-image">
+                            <img src="assets/news_space.jpg" alt="Space News">
+                        </div>
+                        <div class="card-content">
+                            <span class="category tag-science">علوم</span>
+                            <h3>تلسكوب جيمس ويب يلتقط صوراً مذهلة للمجرات البعيدة</h3>
+                            <p>صور جديدة تكشف تفاصيل لم يسبق لها مثيل عن بدايات الكون ونشأة النجوم.</p>
+                            <div class="card-footer">
+                                <span class="author">سارة علي</span>
+                                <time>منذ 4 ساعات</time>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- Card 3 -->
+                    <article class="news-card">
+                        <div class="card-image">
+                            <img src="assets/news_car.jpg" alt="Auto News">
+                        </div>
+                        <div class="card-content">
+                            <span class="category tag-auto">سيارات</span>
+                            <h3>ثورة السيارات الكهربائية: بطاريات تشحن في 5 دقائق</h3>
+                            <p>تقنية جديدة قد تقلب موازين صناعة السيارات الكهربائية وتنهي قلق المسافات.</p>
+                            <div class="card-footer">
+                                <span class="author">خالد عمر</span>
+                                <time>منذ 6 ساعات</time>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Section -->
+        <section class="newsletter section-padding">
+            <div class="container">
+                <div class="newsletter-box">
+                    <div class="newsletter-text">
+                        <h2>اشترك في نشرتنا البريدية</h2>
+                        <p>احصل على أهم الأخبار والتحليلات مباشرة في بريدك الإلكتروني صباح كل يوم.</p>
+                    </div>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="بريدك الإلكتروني..." required>
+                        <button type="submit">اشتراك</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h2>Naif<span>News</span></h2>
+                    <p>منصتك الإخبارية الموثوقة، نغطي الأحداث بدقة وموضوعية لنبقيك دائماً في قلب الحدث.</p>
+                </div>
+                <div class="footer-links">
+                    <h3>أقسام الموقع</h3>
+                    <ul>
+                        <li><a href="#">الرئيسية</a></li>
+                        <li><a href="#">سياسة</a></li>
+                        <li><a href="#">اقتصاد</a></li>
+                        <li><a href="#">تكنولوجيا</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>معلومات</h3>
+                    <ul>
+                        <li><a href="#">من نحن</a></li>
+                        <li><a href="#">اتصل بنا</a></li>
+                        <li><a href="#">سياسة الخصوصية</a></li>
+                        <li><a href="#">شروط الاستخدام</a></li>
+                    </ul>
+                </div>
+                <div class="footer-social">
+                    <h3>تابعنا</h3>
+                    <div class="social-icons">
+                        <a href="#">فيسبوك</a>
+                        <a href="#">تويتر</a>
+                        <a href="#">انستغرام</a>
+                        <a href="#">يوتيوب</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 NaifNews. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Local run helper: يظهر إذا فتح الملف عبر file:// -->
+    <div id="local-run-banner"
+        style="display:none;padding:12px;background:#fff3bf;border:1px solid #f1c40f;color:#6b3b00;text-align:right;position:sticky;top:64px;z-index:2500;">
+        <strong>تشغيل الموقع محلياً:</strong>
+        <div style="margin-top:6px;">
+            استخدم أحد الأوامر التالية في مجلد المشروع ثم افتح http://localhost:8000 أو http://localhost:3000
+        </div>
+        <ul style="margin:8px 0 0 0; padding-right:12px; list-style: none;">
+            <li>Python 3: <code id="cmd-py">python -m http.server 8000</code> <button data-cmd="python -m http.server 8000">نسخ</button>
+            </li>
+            <li>Node (http-server): <code id="cmd-node">npx http-server -p 8000</code> <button data-cmd="npx http-server -p 8000">نسخ</button>
+            </li>
+            <li>VSCode Live Server: افتح المجلد ثم "Live Server" (امتداد)</li>
+        </ul>
+        <div style="margin-top:8px;">
+            <button id="local-run-dismiss"
+                style="background:transparent;border:1px solid #d1ad00;padding:6px;border-radius:6px;cursor:pointer;">اغلاق
+                هذا الشريط</button>
+        </div>
+    </div>
+
+    <!-- Inline helper script: يظهر الشريط في حال file:// ويمكن نسخ الأوامر -->
+    <script>
+        (function () {
+            try {
+                const banner = document.getElementById('local-run-banner');
+                if (!banner) return;
+                if (location.protocol === 'file:') {
+                    banner.style.display = 'block';
+                }
+                // copy buttons
+                document.querySelectorAll('#local-run-banner button[data-cmd]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const cmd = btn.getAttribute('data-cmd');
+                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                            navigator.clipboard.writeText(cmd).then(() => {
+                                alert('تم نسخ الأمر إلى الحافظة:\n' + cmd);
+                            }).catch(() => {
+                                prompt('انسخ الأمر يدوياً:', cmd);
+                            });
+                        } else {
+                            prompt('انسخ الأمر يدوياً:', cmd);
+                        }
+                    });
+                });
+                const dismiss = document.getElementById('local-run-dismiss');
+                if (dismiss) dismiss.addEventListener('click', () => banner.style.display = 'none');
+            } catch (e) {
+                console.warn('run helper failed', e);
+            }
+        })();
+    </script>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول | NaifNews Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="admin_style.css">
+    <style>
+        body {
+            background-color: var(--main-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .login-header {
+            margin-bottom: 30px;
+        }
+
+        .login-header h2 {
+            font-size: 2rem;
+            color: var(--text-main);
+            margin-bottom: 10px;
+        }
+
+        .login-header span {
+            color: var(--primary-color);
+        }
+
+        .login-form .form-group {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .error-msg {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        /* Quick fix for dark mode inputs if system preference matches but js hasn't run yet */
+        @media (prefers-color-scheme: dark) {
+            /* This is just a fallback, the JS will handle the theme properly based on localStorage */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-card">
+        <div class="login-header">
+            <h2>Naif<span>Admin</span></h2>
+            <p style="color: var(--text-muted);">لوحة تحكم الإدارة</p>
+        </div>
+
+        <div id="login-error" class="error-msg">بيانات الدخول غير صحيحة</div>
+
+        <form id="login-form" class="login-form">
+            <div class="form-group">
+                <label>البريد الإلكتروني</label>
+                <input type="email" id="email" required placeholder="admin@news.com" value="naif@news.com">
+            </div>
+            <div class="form-group">
+                <label>كلمة المرور</label>
+                <input type="password" id="password" required placeholder="••••••••" value="123456">
+            </div>
+            <button type="submit" class="btn-primary login-btn">دخول</button>
+        </form>
+
+        <div style="margin-top: 20px; font-size: 0.85rem; color: var(--text-muted);">
+            <p>البيانات الافتراضية:</p>
+            <p>naif@news.com / 123456</p>
+        </div>
+    </div>
+
+    <script>
+        // Apply Theme
+        const savedTheme = localStorage.getItem('admin_theme');
+        if (savedTheme === 'dark') document.body.setAttribute('data-theme', 'dark');
+
+        // Login Logic (Connected to Server API)
+        document.getElementById('login-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('login-error');
+            const submitBtn = document.querySelector('.login-btn');
+
+            errorMsg.style.display = 'none';
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'جاري التحقق...';
+
+            try {
+                const response = await fetch('http://localhost:3000/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Save Token & User Info
+                    localStorage.setItem('naifnews_token', data.token);
+                    localStorage.setItem('naifnews_current_user', JSON.stringify(data.user));
+
+                    // Redirect
+                    window.location.href = 'dashboard.html';
+                } else {
+                    throw new Error(data.error || 'فشل تسجيل الدخول');
+                }
+            } catch (err) {
+                errorMsg.textContent = 'بيانات الدخول غير صحيحة';
+                errorMsg.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'دخول';
+            }
+        });
+    </script>
+</body>
+
+</html>

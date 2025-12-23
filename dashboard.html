@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم | NaifNews Admin</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="admin_style.css">
+    <!-- Using a simple FontAwesome alternative or SVG icons inline for performance/simplicity, but here specific simple SVGs will be used in code is better or emojis for simplicity unless requested otherwise. Using unicode icons/SVGs is safer than external CDN links if internet is flaky, but CDNs are standard. Let's use simple SVGs for a premium feel. -->
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Naif<span>Admin</span></h2>
+            </div>
+
+            <div class="admin-profile">
+                <img src="assets/admin_avatar.png" alt="Admin">
+                <div class="admin-info">
+                    <h4>نايف المنصوري</h4>
+                    <small>المدير العام</small>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="#" class="nav-link active" data-target="overview">
+                            <span class="icon">📊</span>
+                            <span class="text">الرئيسية</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link" data-target="articles">
+                            <span class="icon">📝</span>
+                            <span class="text">المقالات</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link" data-target="users">
+                            <span class="icon">👥</span>
+                            <span class="text">المستخدمين</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link" data-target="comments">
+                            <span class="icon">💬</span>
+                            <span class="text">التعليقات</span>
+                            <span class="badge">5</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link" data-target="settings">
+                            <span class="icon">⚙️</span>
+                            <span class="text">الإعدادات</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="index.html" class="logout-btn">
+                    <span class="icon">🚪</span>
+                    <span class="text">تسجيل خروج</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="top-left">
+                    <button id="toggle-sidebar" aria-label="Toggle Menu">☰</button>
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input id="dashboard-search" type="text" placeholder="بحث في لوحة التحكم...">
+                    </div>
+                </div>
+                <div class="top-actions">
+                    <!-- New: Current user selector (impersonate/test) -->
+                    <div style="display:flex;align-items:center;gap:8px;margin-inline-start:12px;">
+                        <label for="current-user-select" style="font-weight:600;color:var(--text-muted);">المستخدم:</label>
+                        <select id="current-user-select" style="padding:6px;border-radius:6px;">
+                            <!-- populated by JS -->
+                        </select>
+                    </div>
+
+                    <button id="run-audit-btn" class="icon-btn" title="فحص أعمق للموقع">🧭 فحص الموقع</button>
+                    <button id="admin-theme-toggle" class="icon-btn" aria-label="تغيير الوضع">🌙</button>
+                    <button class="icon-btn" aria-label="Notifications">🔔 <span class="dot"></span></button>
+                    <button id="open-new-post-btn" class="add-new-btn">+ مقال جديد</button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="content-wrapper">
+
+                <!-- Audit Panel (hidden until run) -->
+                <div id="audit-panel" class="card" style="display:none; margin-bottom:20px;">
+                    <div class="card-header">
+                        <h3>نتيجة الفحص العميق</h3>
+                        <div>
+                            <button id="audit-export-btn" class="btn-primary" style="margin-left:8px;">تصدير JSON</button>
+                            <button id="audit-clear-btn" class="btn-secondary">إخفاء</button>
+                        </div>
+                    </div>
+                    <div id="audit-results" style="padding:16px; font-size:0.95rem; color:var(--text-main); max-height:360px; overflow:auto;">
+                        <!-- results injected here -->
+                    </div>
+                </div>
+
+                <!-- Section: Overview -->
+                <section id="section-overview" class="dashboard-section active">
+                    <div class="page-header">
+                        <h2 class="page-title">نظرة عامة</h2>
+                        <div class="date-filter">
+                            <select>
+                                <option>اليوم</option>
+                                <option>آخر 7 أيام</option>
+                                <option selected>آخر 30 يوم</option>
+                                <option>هذا العام</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Main Chart Section -->
+                    <div class="card chart-card full-width">
+                        <div class="card-header">
+                            <h3>إحصائيات الزوار (Live)</h3>
+                            <div class="chart-legend">
+                                <span class="dot-legend visitors"></span> زوار
+                                <span class="dot-legend views"></span> مشاهدات
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="visitorsChart" height="300"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card blue">
+                            <div class="stat-icon">👁️</div>
+                            <div class="stat-info">
+                                <!-- id added -->
+                                <h3 id="stat-visits">120,500</h3>
+                                <p>زيارات هذا الشهر</p>
+                            </div>
+                            <div class="stat-trend up">
+                                <span>+15%</span> ↗
+                            </div>
+                        </div>
+                        <div class="stat-card green">
+                            <div class="stat-icon">📄</div>
+                            <div class="stat-info">
+                                <!-- id added -->
+                                <h3 id="stat-articles">45</h3>
+                                <p>مقال منشور</p>
+                            </div>
+                            <div class="stat-trend up">
+                                <span>+5</span> ↗
+                            </div>
+                        </div>
+                        <div class="stat-card purple">
+                            <div class="stat-icon">👥</div>
+                            <div class="stat-info">
+                                <!-- id added -->
+                                <h3 id="stat-subscribers">1,200</h3>
+                                <p>مشترك جديد</p>
+                            </div>
+                            <div class="stat-trend down">
+                                <span>-2%</span> ↘
+                            </div>
+                        </div>
+                        <div class="stat-card orange">
+                            <div class="stat-icon">💰</div>
+                            <div class="stat-info">
+                                <!-- id added -->
+                                <h3 id="stat-revenue">$5,400</h3>
+                                <p>الأرباح المقدرة</p>
+                            </div>
+                            <div class="stat-trend up">
+                                <span>+8%</span> ↗
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity & Charts Area -->
+                    <div class="split-section">
+
+                        <!-- Recent Articles Table -->
+                        <div class="card table-card">
+                            <div class="card-header">
+                                <h3>آخر المقالات</h3>
+                                <a href="#"
+                                    onclick="document.querySelector('[data-target=\'articles\']').click(); return false;"
+                                    class="more-link">عرض الكل</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>العنوان</th>
+                                            <th>الكاتب</th>
+                                            <th>التاريخ</th>
+                                            <th>الحالة</th>
+                                            <th>الإجراءات</th>
+                                        </tr>
+                                    </thead>
+                                    <!-- added id to tbody for JS targeting -->
+                                    <tbody id="articles-table-body">
+                                        <!-- Dynamic Content Loaded via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Quick Stats / Systems -->
+                        <div class="card system-card">
+                            <div class="card-header">
+                                <h3>أداء الخادم</h3>
+                            </div>
+                            <div class="server-stats">
+                                <div class="stat-item">
+                                    <div class="stat-label">
+                                        <span>CPU Usage</span>
+                                        <span>24%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress" style="width: 24%; background: #3b82f6;"></div>
+                                    </div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-label">
+                                        <span>Memory</span>
+                                        <span>58%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress" style="width: 58%; background: #10b981;"></div>
+                                    </div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-label">
+                                        <span>Storage</span>
+                                        <span>85%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress" style="width: 85%; background: #f59e0b;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="quick-tasks">
+                                <h3>مهام سريعة</h3>
+                                <ul class="task-list">
+                                    <li>
+                                        <input type="checkbox" id="task1" checked>
+                                        <label for="task1">مراجعة تعليقات الأمس</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="task2">
+                                        <label for="task2">تحديث سياسة الخصوصية</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- Section: Articles -->
+                <section id="section-articles" class="dashboard-section" style="display: none;">
+                    <h2 class="page-title">إدارة المقالات</h2>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>جميع المقالات</h3>
+                            <button class="add-new-btn small"
+                                onclick="document.getElementById('open-new-post-btn').click()">+ إضافة</button>
+                        </div>
+                        <div style="padding: 50px; text-align: center; color: var(--text-muted);">
+                            <span style="font-size: 3rem;">📝</span>
+                            <p>هنا ستظهر قائمة المقالات الكاملة مع خيارات التعديل والحذف المتقدمة.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section: Users -->
+                <section id="section-users" class="dashboard-section" style="display: none;">
+                    <h2 class="page-title">إدارة المستخدمين</h2>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>قائمة الأعضاء</h3>
+                            <button id="open-new-user-btn" class="add-new-btn small"
+                                onclick="document.getElementById('new-user-modal').classList.add('active')">+ عضو
+                                جديد</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="users-table">
+                                <thead>
+                                    <tr>
+                                        <th>الاسم</th>
+                                        <th>البريد الإلكتروني</th>
+                                        <th>الصلاحية</th>
+                                        <th>تاريخ الانضمام</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dynamic User Content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section: Comments -->
+                <section id="section-comments" class="dashboard-section" style="display: none;">
+                    <h2 class="page-title">إدارة التعليقات</h2>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>التعليقات الواردة</h3>
+                            <span class="badge" id="pending-comments-count"
+                                style="background:var(--warning); color:#fff; padding:2px 8px; border-radius:10px;">0
+                                جديد</span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="comments-table">
+                                <thead>
+                                    <tr>
+                                        <th>الاسم</th>
+                                        <th>التعليق</th>
+                                        <th>المقال</th>
+                                        <th>الحالة</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="comments-table-body">
+                                    <!-- Comments loaded via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section: Settings -->
+                <section id="section-settings" class="dashboard-section" style="display: none;">
+                    <h2 class="page-title">إعدادات الموقع</h2>
+                    <div class="card">
+                        <!-- News Ticker Settings -->
+                        <h3 style="margin-bottom: 15px; color: var(--primary-color);">📢 شريط الأخبار العاجلة</h3>
+                        <div class="form-group">
+                            <label>نصف الشريط المتحرك</label>
+                            <textarea id="settings-ticker-text" rows="2"
+                                placeholder="أدخل الأخبار العاجلة هنا مفصولة بفواصل..."></textarea>
+                            <small style="color: var(--text-muted);">سيظهر هذا النص في الشريط العلوي للموقع
+                                فوراً.</small>
+                        </div>
+                        <hr style="margin: 20px 0; border-color: var(--border-color);">
+
+                        <div class="form-group">
+                            <label>اسم الموقع</label>
+                            <input type="text" value="NaifNews">
+                        </div>
+                        <div class="form-group">
+                            <label>لغة الموقع</label>
+                            <select>
+                                <option>العربية</option>
+                                <option>English</option>
+                            </select>
+                        </div>
+
+                        <!-- New: Design Controls -->
+                        <hr style="margin:20px 0;">
+                        <h3 style="margin-bottom:12px;">تصميم الموقع</h3>
+                        <div class="design-panel">
+                            <div class="form-row">
+                                <label>اللون الرئيسي</label>
+                                <input id="design-primary" type="color" value="#2563eb">
+                            </div>
+                            <div class="form-row">
+                                <label>خلفية الهيدر</label>
+                                <input id="design-headerbg" type="color" value="#ffffff">
+                            </div>
+                            <div class="form-row">
+                                <label>خلفية البطاقات</label>
+                                <input id="design-cardbg" type="color" value="#ffffff">
+                            </div>
+                            <div class="form-row">
+                                <label>الخط</label>
+                                <select id="design-font">
+                                    <option value="Tajawal, sans-serif" selected>Tajawal</option>
+                                    <option value="Arial, sans-serif">Arial</option>
+                                    <option value="system-ui, sans-serif">System</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <label>نصف قطر البطاقات (px)</label>
+                                <input id="design-cardradius" type="range" min="0" max="30" value="12">
+                                <span id="design-cardradius-value">12</span>
+                            </div>
+                            <div class="form-row">
+                                <label>الوضع الداكن</label>
+                                <input id="design-darkmode" type="checkbox">
+                            </div>
+
+                            <div style="margin-top:12px; display:flex; gap:8px;">
+                                <button id="design-apply" class="btn-primary">تطبيق مؤقت</button>
+                                <button id="design-save" class="btn-primary">حفظ التغييرات</button>
+                                <button id="design-reset" class="btn-secondary">إعادة التعيين</button>
+                            </div>
+                        </div>
+                        <!-- End Design Controls -->
+
+                        <div style="margin-top:20px;">
+                            <button class="btn-primary">حفظ التغييرات</button>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- New Post Modal -->
+    <div class="modal" id="new-post-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="new-post-title">إضافة مقال جديد</h3>
+                <button class="close-modal"
+                    onclick="document.getElementById('new-post-modal').classList.remove('active')">&times;</button>
+            </div>
+            <form id="new-post-form" enctype="multipart/form-data">
+                <!-- hidden id for edit mode -->
+                <input type="hidden" name="articleId" id="article-id" value="">
+                <div class="form-group">
+                    <label>عنوان المقال</label>
+                    <input id="article-title" type="text" name="title" required placeholder="أدخل عنواناً جذاباً...">
+                </div>
+                <div class="form-group">
+                    <label>القسم</label>
+                    <select id="article-category" name="category">
+                        <option>سياسة</option>
+                        <option>تكنولوجيا</option>
+                        <option>رياضة</option>
+                        <option>اقتصاد</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>مقتطف قصير</label>
+                    <textarea id="article-excerpt" name="excerpt" rows="3" placeholder="وصف مختصر للمقال"></textarea>
+                </div>
+
+                <!-- Image upload -->
+                <div class="form-group">
+                    <label>صورة المقال (اختياري)</label>
+                    <input id="article-image" name="image" type="file" accept="image/*">
+                    <div style="margin-top:8px;">
+                        <img id="article-image-preview" src="" alt="معاينة الصورة"
+                            style="max-width:160px; display:none; border-radius:8px;" />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary close-modal-btn"
+                        onclick="document.getElementById('new-post-modal').classList.remove('active')">إلغاء</button>
+                    <button type="submit" class="btn-primary" id="save-article-btn">نشر المقال</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- New User Modal -->
+    <div class="modal" id="new-user-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إضافة عضو جديد</h3>
+                <button class="close-modal"
+                    onclick="document.getElementById('new-user-modal').classList.remove('active')">&times;</button>
+            </div>
+            <form id="new-user-form">
+                <div class="form-group">
+                    <label>الاسم الكامل</label>
+                    <input type="text" required placeholder="مثال: محمد علي">
+                </div>
+                <div class="form-group">
+                    <label>البريد الإلكتروني</label>
+                    <input type="email" required placeholder="name@example.com">
+                </div>
+                <div class="form-group">
+                    <label>الصلاحية</label>
+                    <select>
+                        <option value="محرر">محرر</option>
+                        <option value="مشرف">مشرف</option>
+                        <option value="مدير">مدير</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary close-modal-btn"
+                        onclick="document.getElementById('new-user-modal').classList.remove('active')">إلغاء</button>
+                    <button type="submit" class="btn-primary">إضافة العضو</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin_script.js"></script>
+</body>
+
+</html>
