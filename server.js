@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const os = require('os');
 const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
@@ -43,7 +44,8 @@ app.use(express.static(path.join(__dirname, '/')));
 
 // --- Mock Database (In-Memory for Demo, Replace with MongoDB/Postgres) ---
 // In a real app, you would connect to mongoose or pg here.
-const DB_FILE = path.join(__dirname, 'server_db.json');
+// Use system temp dir for Vercel/ReadOnly environments
+const DB_FILE = path.join(os.tmpdir(), 'naifnews_db.json');
 
 // Helper to read DB
 function getDB() {
