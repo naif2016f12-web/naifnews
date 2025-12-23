@@ -10,6 +10,7 @@ const jwt = require('jsonwebtoken');
 const fs = require('fs');
 
 const app = express();
+app.set('trust proxy', 1); // Enable proxy trust for Vercel/proxies
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'naifnews_secret_key_change_this_in_prod';
 
