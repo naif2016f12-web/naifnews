@@ -40,7 +40,8 @@ app.use(limiter);
 app.use(express.json({ limit: '10mb' })); // Increased limit for base64 images
 
 // Serve Static Files (Frontend)
-app.use(express.static(path.join(__dirname, '/')));
+// Serve Static Files (Frontend) - Explicitly resolve current directory
+app.use(express.static(path.resolve(__dirname)));
 
 
 // --- Mock Database (In-Memory for Demo, Replace with MongoDB/Postgres) ---
